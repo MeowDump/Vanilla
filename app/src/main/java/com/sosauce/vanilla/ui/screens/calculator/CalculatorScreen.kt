@@ -54,7 +54,6 @@ import com.sosauce.vanilla.utils.whichParenthesis
 import kotlinx.coroutines.CoroutineScope
 import java.text.DecimalFormatSymbols
 
-
 @Composable
 fun CalculatorScreen(
     modifier: Modifier = Modifier,
@@ -71,6 +70,29 @@ fun CalculatorScreen(
     val maxItemsToHistory by rememberHistoryMaxItems()
     val saveToHistory by rememberUseHistory()
     val swapZeroAndDecimal by rememberSwapZeroAndDecimal()
+
+    val memoryRow = listOf(
+        CalcButton(
+            text = "MC",
+            onClick = { viewModel.handleAction(CalcAction.MemoryClear) },
+            type = ButtonType.ACTION
+        ),
+        CalcButton(
+            text = "MR",
+            onClick = { viewModel.handleAction(CalcAction.MemoryRecall) },
+            type = ButtonType.ACTION
+        ),
+        CalcButton(
+            text = "M+",
+            onClick = { viewModel.handleAction(CalcAction.MemoryAdd) },
+            type = ButtonType.ACTION
+        ),
+        CalcButton(
+            text = "M−",
+            onClick = { viewModel.handleAction(CalcAction.MemorySubtract) },
+            type = ButtonType.ACTION
+        )
+    )
 
     val row1 = listOf(
         CalcButton(
@@ -98,6 +120,7 @@ fun CalculatorScreen(
             type = ButtonType.SPECIAL
         )
     )
+
     val row2 = listOf(
         if (showClearButton) {
             CalcButton(
@@ -142,6 +165,7 @@ fun CalculatorScreen(
             type = ButtonType.OPERATOR
         )
     )
+
     val row3 = listOf(
         CalcButton(
             text = "7",
@@ -164,6 +188,7 @@ fun CalculatorScreen(
             type = ButtonType.OPERATOR
         )
     )
+
     val row4 = listOf(
         CalcButton(
             text = "4",
@@ -186,6 +211,7 @@ fun CalculatorScreen(
             type = ButtonType.OPERATOR
         )
     )
+
     val row5 = listOf(
         CalcButton(
             text = "1",
@@ -208,6 +234,7 @@ fun CalculatorScreen(
             type = ButtonType.OPERATOR
         )
     )
+
     val row6 = listOf(
         if (!swapZeroAndDecimal) {
             CalcButton(
@@ -262,6 +289,7 @@ fun CalculatorScreen(
             type = ButtonType.ACTION
         )
     )
+
     val dragState = rememberDraggableState { dragAmount ->
         onUpdateDragAmount(dragAmount)
     }
@@ -284,14 +312,23 @@ fun CalculatorScreen(
                 },
                 actions = {
 //                    IconButton(
+
 //                        onClick = {},
+
 //                        shapes = IconButtonDefaults.shapes()
+
 //                    ) {
+
 //                        Icon(
+
 //                            painter = painterResource(R.drawable.history_rounded),
+
 //                            contentDescription = stringResource(R.string.history),
+
 //                            tint = MaterialTheme.colorScheme.onBackground
+
 //                        )
+
 //                    }
 
                     IconButton(
@@ -322,11 +359,11 @@ fun CalculatorScreen(
             Spacer(Modifier.height(5.dp))
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(9.dp),
             ) {
-                val rows = listOf(row1, row2, row3, row4, row5, row6)
+                val rows = listOf(memoryRow, row1, row2, row3, row4, row5, row6)
+
                 rows.forEach { row ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
