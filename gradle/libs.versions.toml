@@ -11,7 +11,7 @@ roomCompiler = "2.8.4"
 roomKtx = "2.8.4"
 activityCompose = "1.13.0"
 material3 = "1.5.0-alpha23"
-squircleShape = "5.3.0"
+squircleShape = "5.4.0"
 
 
 [libraries]
