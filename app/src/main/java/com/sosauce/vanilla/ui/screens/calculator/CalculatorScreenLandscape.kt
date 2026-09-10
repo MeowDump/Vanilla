@@ -63,6 +63,29 @@ fun CalculatorScreenLandscape(
     val maxItemsToHistory by rememberHistoryMaxItems()
     val saveToHistory by rememberUseHistory()
 
+    val memoryRow = listOf(
+        CalcButton(
+            text = "MC",
+            onClick = { viewModel.handleAction(CalcAction.MemoryClear) },
+            type = ButtonType.ACTION
+        ),
+        CalcButton(
+            text = "MR",
+            onClick = { viewModel.handleAction(CalcAction.MemoryRecall) },
+            type = ButtonType.ACTION
+        ),
+        CalcButton(
+            text = "M+",
+            onClick = { viewModel.handleAction(CalcAction.MemoryAdd) },
+            type = ButtonType.ACTION
+        ),
+        CalcButton(
+            text = "M−",
+            onClick = { viewModel.handleAction(CalcAction.MemorySubtract) },
+            type = ButtonType.ACTION
+        )
+    )
+
     val row1 = listOf(
         CalcButton(
             text = "√",
@@ -131,6 +154,7 @@ fun CalculatorScreenLandscape(
             )
         }
     )
+
     val row2 = listOf(
         CalcButton(
             text = "%",
@@ -174,6 +198,7 @@ fun CalculatorScreenLandscape(
             type = ButtonType.ACTION
         )
     )
+
     val row3 = listOf(
         CalcButton(
             text = "!",
@@ -273,12 +298,11 @@ fun CalculatorScreenLandscape(
                     onNavigate = onNavigate
                 )
 
-
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(9.dp),
                 ) {
-                    val rows = listOf(row1, row2, row3)
+                    val rows = listOf(memoryRow, row1, row2, row3)
 
                     rows.forEach { row ->
                         Row(
@@ -299,7 +323,5 @@ fun CalculatorScreenLandscape(
                 }
             }
         }
-
-
     }
 }
