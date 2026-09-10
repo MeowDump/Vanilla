@@ -22,19 +22,20 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class CalculatorViewModel(
     private val application: Application
 ) : AndroidViewModel(application) {
 
-
     val textFieldState = TextFieldState()
     var evaluatedCalculation by mutableStateOf("")
         private set
 
+    private var memory: BigDecimal? = null
+
     private val _previewShowErrors = MutableStateFlow(false)
     val previewShowErrors = _previewShowErrors.asStateFlow()
-
 
     init {
         viewModelScope.launch {
@@ -66,8 +67,30 @@ class CalculatorViewModel(
             is CalcAction.AddToField -> textFieldState.insertText(action.char)
             is CalcAction.ResetField -> textFieldState.clearText()
             is CalcAction.Backspace -> textFieldState.backspace()
-            is CalcAction.AddExpressionToField -> textFieldState.setTextAndPlaceCursorAtEnd(action.expression)
+            is CalcAction.AddExpressionToField ->
+                textFieldState.setTextAndPlaceCursorAtEnd(action.expression)
+
+            is CalcAction.MemoryClear -> memory = null
+
+            is CalcAction.MemoryRecall -> {
+                memory?.let {
+                    textFieldState.setTextAndPlaceCursorAtEnd(
+                        it.stripTrailingZeros().toPlainString()
+                    )
+                }
+            }
+
+            is CalcAction.MemoryAdd -> {
+                if (evaluatedCalculation.isNotEmpty() && !evaluatedCalculation.isErrorMessage()) {
+                    memory = (memory ?: BigDecimal.ZERO) + BigDecimal(evaluatedCalculation)
+                }
+            }
+
+            is CalcAction.MemorySubtract -> {
+                if (evaluatedCalculation.isNotEmpty() && !evaluatedCalculation.isErrorMessage()) {
+                    memory = (memory ?: BigDecimal.ZERO) - BigDecimal(evaluatedCalculation)
+                }
+            }
         }
     }
-
 }
